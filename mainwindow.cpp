@@ -39,6 +39,8 @@
 #include <QDate>
 #include <QTime>
 #include <QTextStream>
+#include <QStringBuilder>
+
 
 
 using namespace std;
@@ -228,15 +230,17 @@ void MainWindow::on_pushButton_4_clicked()
 {
      QTextDocument doc;
      QString txt;
-     txt = ::textAt(h3,65,"ASAP Film Order")+
-             ::textAt(h3,40,"From C&C Special Products Co. 952-881-0073")+
-             ::textAt(h3,67,"Mark &nbsp;Robin")+
-             ::textAt(h3,6,"Attn: Customer Service"+::nbsp(63)+"Rip Settings:")+
-             ::textAt(h3,103,"1) Film Positives")+
-             ::textAt(h3,103,"2) DO NOT TRAP")+
-             ::textAt(h3,103,"3) Send Pre Separated")+
-             ::textAt(h3,6,"Date: "+ui->dateEdit->text())+
-             ::textAt(h3,6,"File Name: "+ui->lineEdit_2->text());
+     txt = ::textAt(h3,65,"ASAP Film Order") %
+                  ::textAt(h3,40,"From C&C Special Products Co. 952-881-0073") %
+                  ::textAt(h3,67,"Mark &nbsp;Robin") %
+                  ::textAt(h3,6,"Attn: Customer Service") % ::nbsp(63) % "Rip Settings:"%
+                  ::textAt(h3,103,"1) Film Positives") %
+                  ::textAt(h3,103,"2) DO NOT TRAP") %
+                  ::textAt(h3,103,"3) Send Pre Separated") %
+                  ::textAt(h3,6,"Date: " % ui->dateEdit->text()) %
+                  ::textAt(h3,6,"File Name: " % ui->lineEdit_2->text());
+
+qDebug() << "The memory used is: " << txt.capacity();
 
      doc.setHtml(txt);
 
@@ -258,7 +262,7 @@ void MainWindow::on_pushButton_4_clicked()
              printer.setOutputFileName("c:\\temp\\faxASAP.pdf");
              printer.setOutputFormat(QPrinter::PdfFormat);
              qDebug() <<  "Creating PDF";
-             doc.print(&printer);
+            doc.print(&printer);
              printer.newPage();
 
            }
